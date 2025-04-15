@@ -34,7 +34,15 @@ public abstract class ClasspathHelper {
      * @return the context class loader, may be null
      */
     public static ClassLoader contextClassLoader() {
-        return Thread.currentThread().getContextClassLoader();
+      ClassLoader tccl = null;
+      try {
+          tccl = Thread.currentThread().getContextClassLoader();
+      } catch (SecurityException ex) {
+          if (Reflections.log != null) {
+              Reflections.log.warn("Unable to get context classloader instance.", ex);
+          }
+      }
+      return tccl;
     }
 
     /**
